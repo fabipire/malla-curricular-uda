@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Malla curricular UDAMED</title>
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  padding: 20px;
+}
+h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+.ciclo {
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  width: 230px;
+}
+.ciclo h3 {
+  text-align: center;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+}
+.materia {
+  margin: 5px 0;
+  padding: 5px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.materia.completada {
+  text-decoration: line-through;
+  color: green;
+  border: 1px solid green;
+}
+.materia.inactiva {
+  color: #aaa;
+  cursor: not-allowed;
+}
+.materia.externado,
+.materia.internado {
+  background: #e0f7e9;
+  border: 1px solid #66bb6a;
+}
+#ciclo1 { background: #e5f3ff; }
+#ciclo1 h3 { background: #3399ff; }
+#ciclo2 { background: #e0f7ed; }
+#ciclo2 h3 { background: #33cc99; }
+#ciclo3 { background: #fffbe0; }
+#ciclo3 h3 { background: #ffcc00; }
+#ciclo4 { background: #f4e0f7; }
+#ciclo4 h3 { background: #cc66ff; }
+#ciclo5 { background: #ffe9e0; }
+#ciclo5 h3 { background: #ff9966; }
+#ciclo6 { background: #e0ebf7; }
+#ciclo6 h3 { background: #6699cc; }
+#ciclo7 { background: #ebe0f7; }
+#ciclo7 h3 { background: #9966cc; }
+#ciclo8 { background: #e0f7f4; }
+#ciclo8 h3 { background: #33cccc; }
+#ciclo9 { background: #fde0e0; }
+#ciclo9 h3 { background: #ff6666; }
+#ciclo10 { background: #e0f7ea; }
+#ciclo10 h3 { background: #66cc99; }
+#ciclo11 { background: #fdfde0; }
+#ciclo11 h3 { background: #cccc66; }
+#ciclo12 { background: #eef7e0; }
+#ciclo12 h3 { background: #99cc66; }
+</style>
+</head>
+<body>
+
+<h2>Malla curricular UDAMED</h2>
+<div id="plan"></div>
+
+<script>
+const materias = [
+  [1, "Biología", "", "preclinica"],
+  [1, "Ética y responsabilidad social", "", "preclinica"],
+  [1, "Fisiología I", "", "preclinica"],
+  [1, "Lectura y escritura académica I", "", "preclinica"],
+  [1, "Morfología I", "", "preclinica"],
+  [1, "Primeros Auxilios", "", "preclinica"],
+  [2, "Biología molecular", "Biología", "preclinica"],
+  [2, "Fisiología II", "Fisiología I,Morfología I", "preclinica"],
+  [2, "Morfología II", "Fisiología I,Morfología I", "preclinica"],
+  [2, "Informática", "", "preclinica"],
+  [2, "Bioquímica", "", "preclinica"],
+  [3, "Ciencias del comportamiento", "Biología,Bioquímica,Fisiología II,Morfología II", "preclinica"],
+  [3, "Genética", "Biología molecular,Bioquímica,Fisiología II,Morfología II", "preclinica"],
+  [3, "Inmunología", "Biología molecular,Bioquímica,Fisiología II,Morfología II", "preclinica"],
+  [3, "Microbiología", "Biología molecular,Bioquímica,Fisiología II,Morfología II", "preclinica"],
+  [3, "Patología", "Biología molecular,Bioquímica,Fisiología II,Morfología II", "preclinica"],
+  [3, "Procedimientos del quirófano", "", "clinica"],
+  [4, "Epidemiología", "Informática,Microbiología", "preclinica"],
+  [4, "Farmacología", "Microbiología", "preclinica"],
+  [4, "Fisiopatología", "Fisiología II,Microbiología,Patología", "preclinica"],
+  [4, "Historia de la medicina", "", "preclinica"],
+  [5, "Atención primaria en salud", "Epidemiología,Farmacología,Fisiopatología", "clinica"],
+  [5, "Diagnóstico clínico", "Ciencias del comportamiento,Epidemiología,Farmacología,Fisiopatología", "clinica"],
+  [6, "Medicina basada en la evidencia", "Diagnóstico clínico,Epidemiología", "clinica"],
+  [6, "Medicina integrada I", "Atención primaria en salud,Diagnóstico clínico", "clinica"],
+  [7, "Antropología de la salud", "", "clinica"],
+  [7, "Gestión en salud", "Atención primaria en salud,Medicina basada en la evidencia", "clinica"],
+  [7, "Medicina integrada II", "Medicina basada en la evidencia,Medicina integrada I", "clinica"],
+  [7, "Medicina legal", "Medicina integrada I", "clinica"],
+  [8, "Bioética y deontología médica", "Antropología de la salud,Ética y responsabilidad social,Medicina integrada I", "clinica"],
+  [8, "Medicina integrada III", "Medicina integrada II", "clinica"],
+  [8, "Salud ocupacional", "Gestión en salud,Medicina integrada II,Medicina legal", "clinica"],
+  [9, "Diseño del proyecto de graduación", "Lectura y escritura académica I,Medicina integrada III", "clinica"],
+  [9, "Emergencias y especialidades I", "Medicina integrada III", "clinica"],
+  [9, "Externado comunitario y hospitalario I", "Atención primaria en salud,Medicina integrada III", "clinica"],
+  [10, "Emergencias y especialidades II", "Emergencias y especialidades I", "clinica"],
+  [10, "Externado comunitario y hospitalario II", "Atención primaria en salud,Medicina integrada III", "clinica"],
+  [10, "Lectura y escritura académica II", "Lectura y escritura académica I", "clinica"],
+  [10, "Taller de graduación", "Diseño del proyecto de graduación", "clinica"],
+  [11, "Internado rotativo cirugía", "Emergencias y especialidades II,Externado comunitario y hospitalario II,Lectura y escritura académica II,Taller de graduación", "clinica"],
+  [11, "Internado rotativo medicina interna", "Emergencias y especialidades II,Externado comunitario y hospitalario II,Lectura y escritura académica II,Taller de graduación", "clinica"],
+  [11, "Internado rotativo pediatría", "Emergencias y especialidades II,Externado comunitario y hospitalario II,Lectura y escritura académica II,Taller de graduación", "clinica"],
+  [12, "Internado rotativo ginecología y obstetricia", "Emergencias y especialidades II,Externado comunitario y hospitalario II,Lectura y escritura académica II,Taller de graduación", "clinica"],
+  [12, "Internado rotativo salud comunitaria", "Emergencias y especialidades II,Externado comunitario y hospitalario II,Lectura y escritura académica II,Taller de graduación", "clinica"],
+];
+
+for (let ciclo = 1; ciclo <= 12; ciclo++) {
+  const div = document.createElement("div");
+  div.className = "ciclo";
+  div.id = `ciclo${ciclo}`;
+  div.innerHTML = `<h3>${ciclo}${(ciclo===1?'er': ciclo===2?'do': ciclo===3?'er': ciclo===4?'to': ciclo===5?'to': ciclo===6?'to': ciclo===7?'mo': ciclo===8?'vo': ciclo===9?'no': ciclo===10?'mo': ciclo===11?'vo': 'vo')} ciclo</h3>`;
+  materias.filter(m => m[0] === ciclo).forEach(m => {
+    const mat = document.createElement("div");
+    mat.className = `materia inactiva ${m[3]}`;
+    mat.dataset.nombre = m[1];
+    if (m[2]) mat.dataset.prerreq = m[2];
+    mat.textContent = m[1];
+
+    // Marcar como completada si ya estaba guardada en localStorage
+    const completadas = JSON.parse(localStorage.getItem('materiasCompletadas') || '[]');
+    if (completadas.includes(m[1])) {
+      mat.classList.remove('inactiva');
+      mat.classList.add('completada');
+    }
+
+    div.appendChild(mat);
+  });
+  document.getElementById("plan").appendChild(div);
+}
+
+document.querySelectorAll('.materia').forEach(m => {
+  m.addEventListener('click', function() {
+    if (this.classList.contains('inactiva')) return;
+    this.classList.toggle('completada');
+    actualizarMaterias();
+  });
+});
+
+function actualizarMaterias() {
+  const materiasCompletadas = [...document.querySelectorAll('.materia.completada')]
+    .map(el => el.dataset.nombre);
+  localStorage.setItem('materiasCompletadas', JSON.stringify(materiasCompletadas));
+
+  document.querySelectorAll('.materia.inactiva').forEach(materia => {
+    const prerreqs = materia.dataset.prerreq ? materia.dataset.prerreq.split(",") : [];
+    const completadas = prerreqs.filter(pr => materiasCompletadas.includes(pr));
+    if (completadas.length === prerreqs.length) {
+      materia.classList.remove('inactiva');
+    }
+  });
+}
+
+document.querySelectorAll('.materia').forEach(m => {
+  if (!m.dataset.prerreq) m.classList.remove('inactiva');
+});
+</script>
+
+</body>
+</html>
